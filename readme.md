@@ -98,7 +98,3 @@ Open [http://localhost:8080](http://localhost:8080) to view your stories.
 MIT License © 2025 Suhan Bangera
 
 ---
-
-If you want, I can **also draft a version with badges** (Go build, deploy status, license) to make it look more professional on GitHub.
-
-Do you want me to do that?

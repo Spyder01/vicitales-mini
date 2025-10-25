@@ -1,19 +1,21 @@
 # 📖 Markdown Story Blog
 
-A lightweight **Go-powered story blog** that serves **numeric-chapter Markdown files** dynamically, with **Next/Previous navigation**, **light/dark mode**, and a clean, book-like reading experience.
+A lightweight **Go-powered story blog** that **prerenders numeric-chapter Markdown files** into static HTML, with **Next/Previous navigation**, **breadcrumbs**, **light/dark mode**, and a clean, book-like reading experience.
 
-Ideal for authors who write in Markdown and want to publish stories online with minimal setup.
+Ideal for authors who write in Markdown and want a static, deployable online story site with minimal setup.
 
 ---
 
 ## ✨ Features
 
 * Chapters must be **strictly numeric** (`1.md`, `2.md`, …).
-* Serve Markdown files dynamically via Go.
+* **Pre-render Markdown** to static HTML (`public/` folder).
 * Automatic **Next / Previous buttons** for chapter navigation.
+* **Breadcrumbs** showing `Genre / Story / Chapter`.
 * **Light/Dark mode** support using `prefers-color-scheme`.
-* Star-divider styling for headers.
 * Fully responsive and mobile-friendly.
+* Copies `static/` folder automatically into `public/` for CSS, JS, and images.
+* Ready for **GitHub Pages** or any static hosting.
 
 ---
 
@@ -22,17 +24,19 @@ Ideal for authors who write in Markdown and want to publish stories online with 
 ```
 markdown-story-blog/
 ├── content/
-│   └── the-child/
-│       ├── 1.md
-│       ├── 2.md
-│       └── 3.md
+│   ├── fantasy/
+│   │   └── red-lily/
+│   │       ├── 1.md
+│   │       ├── 2.md
+│   │       └── 3.md
 ├── templates/
-│   └── story.html        # HTML template
+│   └── story.html        # HTML template for each chapter
 ├── static/
 │   └── style.css         # CSS for light/dark mode and navigation
-├── main.go               # Go server
+├── main.go               # Prerender Go program
+├── public/               # Generated HTML & static assets
 ├── go.mod
-└── Dockerfile            # Optional for deployment
+└── .github/workflows/deploy.yml  # GitHub Actions workflow
 ```
 
 ---
@@ -45,7 +49,7 @@ markdown-story-blog/
 
 ---
 
-### Run Locally
+### Generate Static Site Locally
 
 ```bash
 # Clone the repo
@@ -55,32 +59,62 @@ cd <repo-name>
 # Install dependencies
 go mod tidy
 
-# Run server
+# Prerender all stories to public/
 go run main.go
 ```
 
-Open [http://localhost:8080](http://localhost:8080) to view your stories.
+Your HTML and static assets will be in `public/`.
+
+---
+
+### Serve Locally for Testing
+
+```bash
+# Option 1: Using Go
+go run serve.go  # or create a simple file server serving public/
+
+# Option 2: Using Python
+cd public
+python3 -m http.server 8080
+```
+
+Open [http://localhost:8080](http://localhost:8080) to view the site.
 
 ---
 
 ## 📝 Adding Stories
 
 * **Filenames must be numeric**: `1.md`, `2.md`, etc.
-* Each chapter corresponds to `/stories/<folder>/<number>` URL.
+* Directory structure: `content/<genre>/<story>/<chapter>.md`
 * Example:
 
-  ```
-  content/the-child/1.md  → /stories/the-child/1
-  content/the-child/2.md  → /stories/the-child/2
-  ```
-* **Navigation**: Next/Previous links are generated automatically based on the numeric order.
+```
+content/fantasy/red-lily/1.md  → public/fantasy/red-lily/1.html
+content/fantasy/red-lily/2.md  → public/fantasy/red-lily/2.html
+```
+
+* **Navigation**: Next/Previous links are generated automatically based on numeric chapters.
+* **Breadcrumbs**: Automatically show Genre → Story → Chapter.
+
+---
+
+## 🌐 Deployment
+
+* Deploy the contents of `public/` to **GitHub Pages**, **Netlify**, **Vercel**, or any static hosting.
+* Optional: Use **GitHub Actions** to automatically prerender and deploy on push. Example workflow:
+
+```
+.github/workflows/deploy.yml
+```
+
+* Push Markdown changes → GitHub Actions will generate HTML → deploy to `gh-pages` branch.
 
 ---
 
 ## 🎨 Styling
 
-* Light/Dark mode automatically detected.
-* Responsive design for mobile and desktop.
+* Light/Dark mode automatically detected by system preference.
+* Fully responsive design for desktop and mobile.
 * Star-divider separates sections elegantly.
 
 ---
@@ -97,4 +131,3 @@ Open [http://localhost:8080](http://localhost:8080) to view your stories.
 
 MIT License © 2025 Suhan Bangera
 
----

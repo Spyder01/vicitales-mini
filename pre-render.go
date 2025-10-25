@@ -106,14 +106,11 @@ func prerender() error {
 
 			var chapterList []ChapterEntry
 
-			for _, c := range chapters {
+			for i, c := range chapters {
 				if !strings.HasSuffix(c.Name(), ".md") {
 					continue
 				}
-				num := strings.TrimSuffix(c.Name(), ".md")
-				if _, err := strconv.Atoi(num); err != nil {
-					continue
-				}
+				num := strconv.Itoa(i + 1)
 
 				htmlPath := fmt.Sprintf("%s/%s/%s.html", genreName, storyName, num)
 				chapterList = append(chapterList, ChapterEntry{
@@ -136,13 +133,13 @@ func prerender() error {
 
 				// Next/Prev links
 				numInt, _ := strconv.Atoi(num)
-				prev := filepath.Join(genreName, storyName, fmt.Sprintf("%d.md", numInt-1))
-				next := filepath.Join(genreName, storyName, fmt.Sprintf("%d.md", numInt+1))
+				prev := filepath.Join(contentDir, genreName, storyName, fmt.Sprintf("%d.md", numInt-1))
+				next := filepath.Join(contentDir, genreName, storyName, fmt.Sprintf("%d.md", numInt+1))
 				if fileExists(prev) {
-					pageVars["PrevLink"] = fmt.Sprintf("%d.html", numInt-1)
+					pageVars["PrevLink"] = fmt.Sprintf("./%d.html", numInt-1)
 				}
 				if fileExists(next) {
-					pageVars["NextLink"] = fmt.Sprintf("%d.html", numInt+1)
+					pageVars["NextLink"] = fmt.Sprintf("./%d.html", numInt+1)
 				}
 
 				// Ensure output folder exists

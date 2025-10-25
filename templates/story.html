@@ -20,10 +20,10 @@
     {{if or .PrevLink .NextLink}}
     <nav class="story-nav">
       {{if .PrevLink}}
-        <a href="/{{.PrevLink}}" class="nav-btn prev-btn">← Previous</a>
+        <a href="{{.PrevLink}}" class="nav-btn prev-btn">← Previous</a>
       {{end}}
       {{if .NextLink}}
-        <a href="/{{.NextLink}}" class="nav-btn next-btn">Next →</a>
+        <a href="{{.NextLink}}" class="nav-btn next-btn">Next →</a>
       {{end}}
     </nav>
     {{end}}

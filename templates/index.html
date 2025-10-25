@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Story Blog Index</title>
+  <link rel="stylesheet" href="static/css/index.css">
+</head>
+<body>
+  <header>
+    <h1>Story Index</h1>
+    <hr>
+  </header>
+
+  <main>
+    <ul class="genre-list">
+      {{range .Stories}}
+        <li class="genre-item">
+          <strong>{{.Genre}}</strong>
+          <ul class="story-list">
+            <li class="story-item">
+              {{.Story}}
+              <ul class="chapter-list">
+                {{range .Chapters}}
+                  <li class="chapter-item">
+                    <a href="{{.URL}}">Chapter {{.Number}}</a>
+                  </li>
+                {{end}}
+              </ul>
+            </li>
+          </ul>
+        </li>
+      {{end}}
+    </ul>
+  </main>
+
+  <footer>
+    © {{.Year}} Your Name
+  </footer>
+</body>
+</html>

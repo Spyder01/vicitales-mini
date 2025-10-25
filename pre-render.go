@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"html/template"
-	"io"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -14,14 +13,23 @@ import (
 )
 
 var md = goldmark.New()
-var tpl = template.Must(template.ParseFiles("templates/story.html"))
+var storyTpl = template.Must(template.ParseFiles("templates/story.html"))
+var indexTpl = template.Must(template.ParseFiles("templates/index.html"))
 
-type Breadcrumb struct {
-	Name string
-	Link string
+// ChapterEntry represents a single chapter
+type ChapterEntry struct {
+	Number string
+	URL    string
 }
 
-// RenderMarkdown converts a Markdown file to HTML.
+// StoryEntry represents a story with all its chapters
+type StoryEntry struct {
+	Genre    string
+	Story    string
+	Chapters []ChapterEntry
+}
+
+// renderMarkdown converts Markdown file to HTML
 func renderMarkdown(path string) (string, error) {
 	input, err := os.ReadFile(path)
 	if err != nil {
@@ -34,130 +42,153 @@ func renderMarkdown(path string) (string, error) {
 	return buf.String(), nil
 }
 
+// fileExists checks if a file exists
 func fileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
 }
 
-// Recursively copy a folder
-func copyDir(src, dst string) error {
+// copyStatic recursively copies static files
+func copyStatic(src, dst string) error {
 	return filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-
-		relPath, err := filepath.Rel(src, path)
-		if err != nil {
-			return err
-		}
-		destPath := filepath.Join(dst, relPath)
+		rel := strings.TrimPrefix(path, src)
+		target := filepath.Join(dst, rel)
 
 		if info.IsDir() {
-			return os.MkdirAll(destPath, info.Mode())
+			return os.MkdirAll(target, 0755)
 		}
-
-		srcFile, err := os.Open(path)
+		data, err := os.ReadFile(path)
 		if err != nil {
 			return err
 		}
-		defer srcFile.Close()
-
-		dstFile, err := os.Create(destPath)
-		if err != nil {
-			return err
-		}
-		defer dstFile.Close()
-
-		_, err = io.Copy(dstFile, srcFile)
-		return err
+		return os.WriteFile(target, data, 0644)
 	})
 }
 
-// Pre-render all markdown files into public/ preserving folder structure
+// prerender generates HTML for all chapters and index
 func prerender() error {
 	contentDir := "content"
 	outputDir := "public"
 
-	// Copy static folder first
-	if err := copyDir("static", filepath.Join(outputDir, "static")); err != nil {
+	_ = os.MkdirAll(outputDir, 0755)
+
+	var allStories []StoryEntry
+
+	// Walk genres
+	genres, err := os.ReadDir(contentDir)
+	if err != nil {
 		return err
 	}
 
-	return filepath.Walk(contentDir, func(path string, info os.FileInfo, err error) error {
+	for _, g := range genres {
+		if !g.IsDir() {
+			continue
+		}
+		genreName := g.Name()
+		stories, err := os.ReadDir(filepath.Join(contentDir, genreName))
 		if err != nil {
 			return err
 		}
 
-		if info.IsDir() || !strings.HasSuffix(info.Name(), ".md") {
-			return nil
-		}
+		for _, s := range stories {
+			if !s.IsDir() {
+				continue
+			}
+			storyName := s.Name()
+			chapterDir := filepath.Join(contentDir, genreName, storyName)
+			chapters, err := os.ReadDir(chapterDir)
+			if err != nil {
+				return err
+			}
 
-		// Relative path like "fantasy/red-lily/1.md"
-		relPath, err := filepath.Rel(contentDir, path)
-		if err != nil {
-			return err
-		}
+			var chapterList []ChapterEntry
 
-		// Output path like "public/fantasy/red-lily/1.html"
-		outPath := filepath.Join(outputDir, strings.TrimSuffix(relPath, ".md")+".html")
-		if err := os.MkdirAll(filepath.Dir(outPath), 0755); err != nil {
-			return err
-		}
+			for _, c := range chapters {
+				if !strings.HasSuffix(c.Name(), ".md") {
+					continue
+				}
+				num := strings.TrimSuffix(c.Name(), ".md")
+				if _, err := strconv.Atoi(num); err != nil {
+					continue
+				}
 
-		html, err := renderMarkdown(path)
-		if err != nil {
-			return err
-		}
+				htmlPath := fmt.Sprintf("%s/%s/%s.html", genreName, storyName, num)
+				chapterList = append(chapterList, ChapterEntry{
+					Number: num,
+					URL:    htmlPath,
+				})
 
-		pageVars := map[string]any{
-			"Content": template.HTML(html),
-			"Title":   info.Name(),
-			"Year":    time.Now().Year(),
-		}
+				// Render chapter HTML
+				mdPath := filepath.Join(chapterDir, c.Name())
+				htmlContent, err := renderMarkdown(mdPath)
+				if err != nil {
+					return err
+				}
 
-		// Generate breadcrumbs
-		parts := strings.Split(relPath, string(os.PathSeparator))
-		var breadcrumbs []Breadcrumb
-		for i := 0; i < len(parts)-1; i++ {
-			dirPath := filepath.Join(parts[:i+1]...)
-			breadcrumbs = append(breadcrumbs, Breadcrumb{
-				Name: parts[i],
-				Link: filepath.ToSlash(filepath.Join(dirPath, "1.html")),
+				pageVars := map[string]any{
+					"Content": template.HTML(htmlContent),
+					"Title":   num,
+					"Year":    time.Now().Year(),
+				}
+
+				// Next/Prev links
+				numInt, _ := strconv.Atoi(num)
+				prev := filepath.Join(genreName, storyName, fmt.Sprintf("%d.md", numInt-1))
+				next := filepath.Join(genreName, storyName, fmt.Sprintf("%d.md", numInt+1))
+				if fileExists(prev) {
+					pageVars["PrevLink"] = fmt.Sprintf("%d.html", numInt-1)
+				}
+				if fileExists(next) {
+					pageVars["NextLink"] = fmt.Sprintf("%d.html", numInt+1)
+				}
+
+				// Ensure output folder exists
+				outDir := filepath.Join(outputDir, genreName, storyName)
+				_ = os.MkdirAll(outDir, 0755)
+				f, err := os.Create(filepath.Join(outDir, num+".html"))
+				if err != nil {
+					return err
+				}
+				if err := storyTpl.Execute(f, pageVars); err != nil {
+					f.Close()
+					return err
+				}
+				f.Close()
+				fmt.Println("✅ Generated:", htmlPath)
+			}
+
+			allStories = append(allStories, StoryEntry{
+				Genre:    genreName,
+				Story:    storyName,
+				Chapters: chapterList,
 			})
 		}
-		pageVars["Breadcrumbs"] = breadcrumbs
+	}
 
-		// Next / Prev links (numeric chapters)
-		chapterNum, err := strconv.Atoi(strings.TrimSuffix(info.Name(), ".md"))
-		if err == nil {
-			storyDir := filepath.Dir(path)
-			prev := filepath.Join(storyDir, fmt.Sprintf("%d.md", chapterNum-1))
-			next := filepath.Join(storyDir, fmt.Sprintf("%d.md", chapterNum+1))
+	// Copy static files
+	if err := copyStatic("static", filepath.Join(outputDir, "static")); err != nil {
+		return err
+	}
 
-			if fileExists(prev) {
-				relPrev, _ := filepath.Rel(contentDir, prev)
-				pageVars["PrevLink"] = strings.TrimSuffix(filepath.ToSlash(relPrev), ".md") + ".html"
-			}
-			if fileExists(next) {
-				relNext, _ := filepath.Rel(contentDir, next)
-				pageVars["NextLink"] = strings.TrimSuffix(filepath.ToSlash(relNext), ".md") + ".html"
-			}
-		}
+	// Generate index.html
+	indexFile, err := os.Create(filepath.Join(outputDir, "index.html"))
+	if err != nil {
+		return err
+	}
+	defer indexFile.Close()
 
-		// Generate HTML
-		f, err := os.Create(outPath)
-		if err != nil {
-			return err
-		}
-		defer f.Close()
+	if err := indexTpl.Execute(indexFile, map[string]any{
+		"Stories": allStories,
+		"Year":    time.Now().Year(),
+	}); err != nil {
+		return err
+	}
 
-		if err := tpl.Execute(f, pageVars); err != nil {
-			return err
-		}
-
-		fmt.Println("✅ Generated:", outPath)
-		return nil
-	})
+	fmt.Println("✨ All stories rendered in ./public/")
+	return nil
 }
 
 func main() {
@@ -165,5 +196,4 @@ func main() {
 		fmt.Println("❌ Error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("✨ All stories rendered in ./public/ including static assets!")
 }

@@ -1,0 +1,139 @@
+body {
+  font-family: 'Georgia', serif;
+  background-color: #faf8f6;
+  color: #2e2e2e;
+  padding: 2rem 1rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+header hr {
+  width: 60px;
+  height: 3px;
+  margin: 0 auto;
+  border: none;
+  border-radius: 2px;
+  background: #d7b89b;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Nested Lists - Vertical Only */
+.genre-list, .story-list, .chapter-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.genre-item {
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.story-list {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.story-item {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.chapter-list {
+  margin-top: 0.3rem;
+  padding-left: 1.5rem;
+  display: block; /* ensures strictly vertical */
+}
+
+.chapter-item {
+  margin-bottom: 0.3rem;
+}
+
+.chapter-item a {
+  text-decoration: none;
+  color: #b17457;
+  border-bottom: 1px dotted #caa890;
+  transition: color 0.2s, border-color 0.2s;
+  display: inline-block;
+}
+
+.chapter-item a:hover {
+  color: #7a3e28;
+  border-color: #7a3e28;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1e1e1e;
+    color: #ddd;
+  }
+
+  header hr {
+    background: #f4a261;
+  }
+
+  .chapter-item a {
+    color: #f4a261;
+  }
+
+  .chapter-item a:hover {
+    color: #e76f51;
+    border-color: #e76f51;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+
+  .story-list {
+    padding-left: 1rem;
+  }
+
+  .chapter-list {
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .genre-item {
+    font-size: 1.1rem;
+  }
+
+  .story-item {
+    font-size: 1rem;
+  }
+
+  .chapter-item a {
+    font-size: 0.95rem;
+  }
+}

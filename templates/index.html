@@ -18,14 +18,23 @@
           <strong>{{.Genre}}</strong>
           <ul class="story-list">
             <li class="story-item">
-              {{.Story}}
-              <ul class="chapter-list">
-                {{range .Chapters}}
-                  <li class="chapter-item">
-                    <a href="{{.URL}}">Chapter {{.Number}}</a>
-                  </li>
-                {{end}}
-              </ul>
+
+              <!-- Cover image added here -->
+              {{if .CoverURL}}
+                <img src="{{.CoverURL}}" class="cover" alt="Cover of {{.Story}}">
+              {{end}}
+
+              <div class="story-info">
+                <span class="story-title">{{.Story}}</span>
+                <ul class="chapter-list">
+                  {{range .Chapters}}
+                    <li class="chapter-item">
+                      <a href="{{.URL}}">Chapter {{.Number}}</a>
+                    </li>
+                  {{end}}
+                </ul>
+              </div>
+
             </li>
           </ul>
         </li>

@@ -22,11 +22,12 @@ type ChapterEntry struct {
 	URL    string
 }
 
-// StoryEntry represents a story with all its chapters
+// StoryEntry represents a story with all its chapters (and optional cover)
 type StoryEntry struct {
 	Genre    string
 	Story    string
 	Chapters []ChapterEntry
+	CoverURL string
 }
 
 // renderMarkdown converts Markdown file to HTML
@@ -104,6 +105,18 @@ func prerender() error {
 				return err
 			}
 
+			// Detect cover file (cover.png, cover.jpg, cover.jpeg)
+			coverPath := ""
+			possibleCovers := []string{"cover.png", "cover.jpg", "cover.jpeg"}
+
+			for _, name := range possibleCovers {
+				p := filepath.Join(chapterDir, name)
+				if fileExists(p) {
+					coverPath = fmt.Sprintf("%s/%s/%s", genreName, storyName, name)
+					break
+				}
+			}
+
 			var chapterList []ChapterEntry
 
 			for i, c := range chapters {
@@ -161,6 +174,7 @@ func prerender() error {
 				Genre:    genreName,
 				Story:    storyName,
 				Chapters: chapterList,
+				CoverURL: coverPath,
 			})
 		}
 	}

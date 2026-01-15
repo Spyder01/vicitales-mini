@@ -1,50 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Story Blog Index</title>
-  <link rel="stylesheet" href="static/css/index.css">
+  <meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Index</title>
+  <link rel="stylesheet" href="static/css/index.css" />
 </head>
 <body>
-  <header>
-    <h1>Story Index</h1>
-    <hr>
-  </header>
 
-  <main>
-    <ul class="genre-list">
+<header class="site-header">
+  <h1>Story Index</h1>
+  <div class="underline"></div>
+</header>
+
+<main class="container">
+
+  {{range .Genres}}
+  <section class="genre-section">
+
+    <h2 class="genre-title">{{.Name}}</h2>
+
+    <div class="story-grid">
       {{range .Stories}}
-        <li class="genre-item">
-          <strong>{{.Genre}}</strong>
-          <ul class="story-list">
-            <li class="story-item">
 
-              <!-- Cover image added here -->
-              {{if .CoverURL}}
-                <img src="{{.CoverURL}}" class="cover" alt="Cover of {{.Story}}">
-              {{end}}
+      <div class="story-card">
+        
+        {{if .CoverURL}}
+        <img src="{{.CoverURL}}" class="story-cover" alt="{{.Story}}">
+        {{else}}
+        <div class="story-cover placeholder"></div>
+        {{end}}
 
-              <div class="story-info">
-                <span class="story-title">{{.Story}}</span>
-                <ul class="chapter-list">
-                  {{range .Chapters}}
-                    <li class="chapter-item">
-                      <a href="{{.URL}}">Chapter {{.Number}}</a>
-                    </li>
-                  {{end}}
-                </ul>
-              </div>
+        <div class="story-details">
+          <h3 class="story-name">{{.Story}}</h3>
 
-            </li>
+          <button class="chapter-toggle" onclick="toggleChapters(this)">
+            Show Chapters ▾
+          </button>
+
+          <ul class="chapter-list">
+            {{range .Chapters}}
+            <li><a href="{{.URL}}">Chapter {{.Number}}</a></li>
+            {{end}}
           </ul>
-        </li>
-      {{end}}
-    </ul>
-  </main>
 
-  <footer>
-    © {{.Year}} Your Name
-  </footer>
+        </div>
+
+      </div>
+
+      {{end}}
+    </div>
+
+  </section>
+  {{end}}
+
+</main>
+
+<footer class="site-footer">
+  © {{.Year}} Suhan Bangera
+</footer>
+
+
+<script>
+function toggleChapters(btn) {
+  const list = btn.nextElementSibling;
+  const open = list.classList.contains("open");
+  
+  list.classList.toggle("open");
+  btn.textContent = open ? "Show Chapters ▾" : "Hide Chapters ▴";
+}
+</script>
 
 </body>
 </html>

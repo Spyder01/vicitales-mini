@@ -1,135 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Story Blog Index</title>
-  <link rel="stylesheet" href="static/css/index.css">
+  <meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Index</title>
+  <link rel="stylesheet" href="static/css/index.css" />
 </head>
 <body>
-  <header>
-    <h1>Story Index</h1>
-    <hr>
-  </header>
 
-  <main>
-    <ul class="genre-list">
+<header class="site-header">
+  <h1>Story Index</h1>
+  <div class="underline"></div>
+</header>
+
+<main class="container">
+
+  
+  <section class="genre-section">
+
+    <h2 class="genre-title">action</h2>
+
+    <div class="story-grid">
       
-        <li class="genre-item">
-          <strong>action</strong>
-          <ul class="story-list">
-            <li class="story-item">
 
-              
-              
+      <div class="story-card">
+        
+        
+        <img src="action/Red%20Lily/cover.png" class="story-cover" alt="Red Lily">
+        
 
-              <div class="story-info">
-                <span class="story-title">red-lily</span>
-                <ul class="chapter-list">
-                  
-                    <li class="chapter-item">
-                      <a href="action/red-lily/1.html">Chapter 1</a>
-                    </li>
-                  
-                    <li class="chapter-item">
-                      <a href="action/red-lily/2.html">Chapter 2</a>
-                    </li>
-                  
-                </ul>
-              </div>
+        <div class="story-details">
+          <h3 class="story-name">Red Lily</h3>
 
-            </li>
+          <button class="chapter-toggle" onclick="toggleChapters(this)">
+            Show Chapters ▾
+          </button>
+
+          <ul class="chapter-list">
+            
+            <li><a href="action/Red%20Lily/1.html">Chapter 1</a></li>
+            
+            <li><a href="action/Red%20Lily/2.html">Chapter 2</a></li>
+            
           </ul>
-        </li>
+
+        </div>
+
+      </div>
+
       
-        <li class="genre-item">
-          <strong>horror</strong>
-          <ul class="story-list">
-            <li class="story-item">
+    </div>
 
-              
-              
+  </section>
+  
+  <section class="genre-section">
 
-              <div class="story-info">
-                <span class="story-title">the-silence</span>
-                <ul class="chapter-list">
-                  
-                    <li class="chapter-item">
-                      <a href="horror/the-silence/1.html">Chapter 1</a>
-                    </li>
-                  
-                </ul>
-              </div>
+    <h2 class="genre-title">horror</h2>
 
-            </li>
+    <div class="story-grid">
+      
+
+      <div class="story-card">
+        
+        
+        <img src="horror/The%20Silence/cover.png" class="story-cover" alt="The Silence">
+        
+
+        <div class="story-details">
+          <h3 class="story-name">The Silence</h3>
+
+          <button class="chapter-toggle" onclick="toggleChapters(this)">
+            Show Chapters ▾
+          </button>
+
+          <ul class="chapter-list">
+            
+            <li><a href="horror/The%20Silence/1.html">Chapter 1</a></li>
+            
           </ul>
-        </li>
+
+        </div>
+
+      </div>
+
       
-        <li class="genre-item">
-          <strong>romance</strong>
-          <ul class="story-list">
-            <li class="story-item">
+    </div>
 
-              
-              
-                <img src="romance/The%20Forgotten%20Us/cover.png" class="cover" alt="Cover of The Forgotten Us">
-              
+  </section>
+  
+  <section class="genre-section">
 
-              <div class="story-info">
-                <span class="story-title">The Forgotten Us</span>
-                <ul class="chapter-list">
-                  
-                    <li class="chapter-item">
-                      <a href="romance/The%20Forgotten%20Us/1.html">Chapter 1</a>
-                    </li>
-                  
-                </ul>
-              </div>
+    <h2 class="genre-title">romance</h2>
 
-            </li>
+    <div class="story-grid">
+      
+
+      <div class="story-card">
+        
+        
+        <img src="romance/The%20Forgotten%20Us/cover.png" class="story-cover" alt="The Forgotten Us">
+        
+
+        <div class="story-details">
+          <h3 class="story-name">The Forgotten Us</h3>
+
+          <button class="chapter-toggle" onclick="toggleChapters(this)">
+            Show Chapters ▾
+          </button>
+
+          <ul class="chapter-list">
+            
+            <li><a href="romance/The%20Forgotten%20Us/1.html">Chapter 1</a></li>
+            
           </ul>
-        </li>
+
+        </div>
+
+      </div>
+
       
-        <li class="genre-item">
-          <strong>romance</strong>
-          <ul class="story-list">
-            <li class="story-item">
 
-              
-              
+      <div class="story-card">
+        
+        
+        <img src="romance/sparks/cover.png" class="story-cover" alt="sparks">
+        
 
-              <div class="story-info">
-                <span class="story-title">sparks</span>
-                <ul class="chapter-list">
-                  
-                    <li class="chapter-item">
-                      <a href="romance/sparks/1.html">Chapter 1</a>
-                    </li>
-                  
-                    <li class="chapter-item">
-                      <a href="romance/sparks/2.html">Chapter 2</a>
-                    </li>
-                  
-                    <li class="chapter-item">
-                      <a href="romance/sparks/3.html">Chapter 3</a>
-                    </li>
-                  
-                    <li class="chapter-item">
-                      <a href="romance/sparks/4.html">Chapter 4</a>
-                    </li>
-                  
-                </ul>
-              </div>
+        <div class="story-details">
+          <h3 class="story-name">sparks</h3>
 
-            </li>
+          <button class="chapter-toggle" onclick="toggleChapters(this)">
+            Show Chapters ▾
+          </button>
+
+          <ul class="chapter-list">
+            
+            <li><a href="romance/sparks/1.html">Chapter 1</a></li>
+            
+            <li><a href="romance/sparks/2.html">Chapter 2</a></li>
+            
+            <li><a href="romance/sparks/3.html">Chapter 3</a></li>
+            
+            <li><a href="romance/sparks/4.html">Chapter 4</a></li>
+            
           </ul>
-        </li>
-      
-    </ul>
-  </main>
 
-  <footer>
-    © 2026 Your Name
-  </footer>
+        </div>
+
+      </div>
+
+      
+    </div>
+
+  </section>
+  
+
+</main>
+
+<footer class="site-footer">
+  © 2026 Suhan Bangera
+</footer>
+
+
+<script>
+function toggleChapters(btn) {
+  const list = btn.nextElementSibling;
+  const open = list.classList.contains("open");
+  
+  list.classList.toggle("open");
+  btn.textContent = open ? "Show Chapters ▾" : "Hide Chapters ▴";
+}
+</script>
 
 </body>
 </html>

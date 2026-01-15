@@ -1,211 +1,186 @@
-/* ------------------------------
-   Base Styling
------------------------------- */
+/* ---------------------------------------------------
+   Base
+--------------------------------------------------- */
+
+:root {
+  --bg: #f7f5f3;
+  --card: #ffffff;
+  --text: #1f1f1f;
+  --subtext: #6f6f6f;
+  --accent: #d9a46c;
+  --shadow: rgba(0, 0, 0, 0.12);
+
+  /* Dark mode */
+  --bg-dark: #151515;
+  --card-dark: #1f1f1f;
+  --text-dark: #e8e8e8;
+  --subtext-dark: #a6a6a6;
+  --shadow-dark: rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: var(--bg-dark);
+    --card: var(--card-dark);
+    --text: var(--text-dark);
+    --subtext: var(--subtext-dark);
+    --shadow: var(--shadow-dark);
+  }
+}
 
 body {
-  font-family: 'Georgia', serif;
-  background-color: #faf8f6;
-  color: #2e2e2e;
-  padding: 2rem 1rem;
-  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-header {
+/* ---------------------------------------------------
+   Header
+--------------------------------------------------- */
+
+.site-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  padding: 2rem 0 1.2rem;
 }
 
-header h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.7rem;
-  margin-bottom: 0.6rem;
+.site-header h1 {
+  font-size: 2.4rem;
+  font-family: "Playfair Display", serif;
+  margin: 0;
+}
+
+.underline {
+  width: 60px;
+  height: 4px;
+  background: var(--accent);
+  margin: 0.8rem auto;
+  border-radius: 5px;
+}
+
+/* ---------------------------------------------------
+   Layout Container
+--------------------------------------------------- */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* ---------------------------------------------------
+   Genre Section
+--------------------------------------------------- */
+
+.genre-title {
+  font-size: 1.6rem;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  margin: 2rem 0 1rem;
+  text-transform: capitalize;
+  color: var(--text);
 }
 
-header hr {
-  width: 70px;
-  height: 3px;
-  margin: 0 auto;
+/* ---------------------------------------------------
+   Story Grid
+--------------------------------------------------- */
+
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ---------------------------------------------------
+   Story Card
+--------------------------------------------------- */
+
+.story-card {
+  background: var(--card);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  transition: transform .2s ease;
+}
+
+.story-card:hover {
+  transform: translateY(-4px);
+}
+
+.story-cover {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.story-cover.placeholder {
+  background: #ccc;
+}
+
+/* ---------------------------------------------------
+   Story Info
+--------------------------------------------------- */
+
+.story-details {
+  padding: 0.9rem 1rem 1.2rem;
+}
+
+.story-name {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------
+   Chapters
+--------------------------------------------------- */
+
+.chapter-toggle {
+  background: none;
   border: none;
-  border-radius: 2px;
-  background: #d7b89b;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  margin-bottom: 0.5rem;
 }
 
-/* Center column */
-main {
-  max-width: 850px;
-  margin: 0 auto;
-}
-
-/* ------------------------------
-   List Styling
------------------------------- */
-
-.genre-list,
-.story-list,
 .chapter-list {
   list-style: none;
   padding-left: 0;
   margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
 }
 
-.genre-item {
-  margin-bottom: 2rem;
-  font-size: 1.35rem;
-  font-weight: 600;
-  color: #3c3028;
-  letter-spacing: 0.3px;
-  border-left: 4px solid #d7b89b;
-  padding-left: 0.75rem;
+.chapter-list.open {
+  max-height: 600px;
 }
 
-/* STORY CARD WITH COVER */
-.story-item {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-  padding: 0.8rem 0;
+.chapter-list li {
+  margin: 0.3rem 0;
 }
 
-.story-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.story-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #4a3c34;
-  margin-bottom: 0.4rem;
-}
-
-/* Cover Images */
-.cover {
-  width: 120px;
-  height: 170px;
-  object-fit: cover;
-  border-radius: 6px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-}
-
-/* Chapters */
-.chapter-list {
-  padding-left: 0;
-  margin-top: 0.2rem;
-}
-
-.chapter-item {
-  margin-bottom: 0.25rem;
-}
-
-.chapter-item a {
-  text-decoration: none;
-  color: #b17457;
-  border-bottom: 1px dashed #caa890;
-  transition: 0.2s;
-}
-
-.chapter-item a:hover {
-  color: #7a3e28;
-  border-color: #7a3e28;
-}
-
-/* ------------------------------
-   Footer
------------------------------- */
-
-footer {
-  text-align: center;
-  margin-top: 3.5rem;
+.chapter-list a {
+  color: var(--text);
   font-size: 0.9rem;
-  color: #777;
-  font-family: 'Georgia', serif;
+  text-decoration: none;
 }
 
-/* ------------------------------
-   Dark Mode
------------------------------- */
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #1e1e1e;
-    color: #dddddd;
-  }
-
-  .genre-item {
-    color: #f1e3d6;
-    border-left-color: #f4a261;
-  }
-
-  .story-title {
-    color: #f2d4bc;
-  }
-
-  .chapter-item a {
-    color: #f4a261;
-    border-color: #af7d55;
-  }
-
-  .chapter-item a:hover {
-    color: #e76f51;
-    border-color: #e76f51;
-  }
-
-  .cover {
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.8);
-  }
+.chapter-list a:hover {
+  color: var(--accent);
 }
 
-/* ------------------------------
-   Responsive
------------------------------- */
+/* ---------------------------------------------------
+   Footer
+--------------------------------------------------- */
 
-@media (max-width: 768px) {
-  body {
-    padding: 1rem;
-  }
-
-  header h1 {
-    font-size: 2.2rem;
-  }
-
-  .story-item {
-    flex-direction: row;
-    gap: 0.8rem;
-  }
-
-  .cover {
-    width: 100px;
-    height: 150px;
-  }
-
-  .story-title {
-    font-size: 1.15rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .story-item {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .story-info {
-    align-items: center;
-  }
-
-  .cover {
-    margin-bottom: 0.5rem;
-  }
-
-  .genre-item {
-    font-size: 1.15rem;
-  }
-
-  .chapter-item a {
-    font-size: 0.95rem;
-  }
+.site-footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: var(--subtext);
 }

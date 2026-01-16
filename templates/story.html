@@ -41,7 +41,7 @@
 
 			// Auto-generate a unique key based on page URL (or .Title)
 			const path = window.location.pathname.replace(/\//g, "_"); 
-			const namespace = "stories"; // you can change this
+			const namespace = "COUNTERS"; // you can change this
 			const key = path || "index";
 
 			// Build API URL
@@ -53,7 +53,7 @@
 					document.getElementById("views-count").textContent = data.value;
 				})
 				.catch(() => {
-					document.getElementById("views-count").textContent = "0";
+					document.getElementById("views-count").textContent = "1";
 				});
 		</script>
 </body>

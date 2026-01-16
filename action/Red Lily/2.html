@@ -13,6 +13,11 @@
       <hr />
     </header>
 
+		<div id="views-container">
+			<span class="eye">👁️</span>
+			<span id="views-count">--</span>
+		</div>
+
     <article>
       <p>I have been coming here for the last eight months, every single day. Sometimes I just sit inside my car for days, surveilling his hotel.</p>
 <p>He doesn't get out much, Daniel King. In fact, I never saw him stepping out of the hotel, not even once. But I did see him once at the lobby — a tall, brutish man with streaks of grey starting to dominate his long red hair. It was him. I just knew it.</p>
@@ -105,5 +110,25 @@
     <footer>
       <p>© 2026 Suhan Bangera</p>
     </footer>
+		<script>
+			const WORKER_URL = "https://counter-api.suhan01-bangera.workers.dev";  
+
+			
+			const path = window.location.pathname.replace(/\//g, "_"); 
+			const namespace = "stories"; 
+			const key = path || "index";
+
+			
+			const api = `${WORKER_URL}/hit/${namespace}/${key}`;
+
+			fetch(api)
+				.then(r => r.json())
+				.then(data => {
+					document.getElementById("views-count").textContent = data.value;
+				})
+				.catch(() => {
+					document.getElementById("views-count").textContent = "0";
+				});
+		</script>
 </body>
 </html>

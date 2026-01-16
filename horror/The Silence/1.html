@@ -13,6 +13,11 @@
       <hr />
     </header>
 
+		<div id="views-container">
+			<span class="eye">👁️</span>
+			<span id="views-count">--</span>
+		</div>
+
     <article>
       <h2>Silence</h2>
 <p>&quot;Your hands are cold,&quot; she whispered, &quot;always so cold.&quot;</p>
@@ -157,5 +162,25 @@
     <footer>
       <p>© 2026 Suhan Bangera</p>
     </footer>
+		<script>
+			const WORKER_URL = "https://counter-api.suhan01-bangera.workers.dev";  
+
+			
+			const path = window.location.pathname.replace(/\//g, "_"); 
+			const namespace = "stories"; 
+			const key = path || "index";
+
+			
+			const api = `${WORKER_URL}/hit/${namespace}/${key}`;
+
+			fetch(api)
+				.then(r => r.json())
+				.then(data => {
+					document.getElementById("views-count").textContent = data.value;
+				})
+				.catch(() => {
+					document.getElementById("views-count").textContent = "0";
+				});
+		</script>
 </body>
 </html>

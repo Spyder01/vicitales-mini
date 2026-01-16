@@ -13,6 +13,11 @@
       <hr />
     </header>
 
+		<div id="views-container">
+			<span class="eye">👁️</span>
+			<span id="views-count">--</span>
+		</div>
+
     <article>
       <p><strong>&quot;YOU WERE SUPPOSED TO EAT THE PASTA, NOT THE COUCH!&quot;</strong> Claudia shouted at the bouncing gremlins who had managed to spill half their dinner onto the couch—and the other half onto Garry’s pants.</p>
 <p>Thea calmly scooped a spoonful of pasta and shoved it into Claudia’s mouth before she could launch into another round of instructions.</p>
@@ -135,5 +140,25 @@
     <footer>
       <p>© 2026 Suhan Bangera</p>
     </footer>
+		<script>
+			const WORKER_URL = "https://counter-api.suhan01-bangera.workers.dev";  
+
+			
+			const path = window.location.pathname.replace(/\//g, "_"); 
+			const namespace = "stories"; 
+			const key = path || "index";
+
+			
+			const api = `${WORKER_URL}/hit/${namespace}/${key}`;
+
+			fetch(api)
+				.then(r => r.json())
+				.then(data => {
+					document.getElementById("views-count").textContent = data.value;
+				})
+				.catch(() => {
+					document.getElementById("views-count").textContent = "0";
+				});
+		</script>
 </body>
 </html>

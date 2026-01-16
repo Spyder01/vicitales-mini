@@ -13,6 +13,11 @@
       <hr />
     </header>
 
+		<div id="views-container">
+			<span class="eye">👁️</span>
+			<span id="views-count">--</span>
+		</div>
+
     <article>
       <p>A strange atmosphere hung in the room. The sheer number of people made me sweat, and yet it was freezing cold. I’d been here for over an hour—and in the five minutes since <em>his</em> arrival, I had already identified eight men who wanted him dead.<br>
 But I couldn't let that happen.</p>
@@ -308,5 +313,25 @@ He caught it.</p>
     <footer>
       <p>© 2026 Suhan Bangera</p>
     </footer>
+		<script>
+			const WORKER_URL = "https://counter-api.suhan01-bangera.workers.dev";  
+
+			
+			const path = window.location.pathname.replace(/\//g, "_"); 
+			const namespace = "stories"; 
+			const key = path || "index";
+
+			
+			const api = `${WORKER_URL}/hit/${namespace}/${key}`;
+
+			fetch(api)
+				.then(r => r.json())
+				.then(data => {
+					document.getElementById("views-count").textContent = data.value;
+				})
+				.catch(() => {
+					document.getElementById("views-count").textContent = "0";
+				});
+		</script>
 </body>
 </html>

@@ -13,6 +13,11 @@
       <hr />
     </header>
 
+		<div id="views-container">
+			<span class="eye">👁️</span>
+			<span id="views-count">--</span>
+		</div>
+
     <article>
       <p>It was a lovely evening in Hangout Cafe, the final rays of daylight were on the brink of being engulfed by the youthful dusk, and the cafe was packed to its brim with the roaring kids and ornate adults cluttered around the place.</p>
 <p>Claudia Shepard was seated at a table across the counter, dunking the biscuits in the coffee that was a cube behind from turning into sugar syrup. She was tired, overworked from her day job, and overwhelmed by what was ahead. Young with a dormant boisterous soul, she would rather be in a bar than a cafe, but her dominant responsible self kept the respite urges down since she could neither afford the price nor the time for such leisurely pursuits.</p>
@@ -73,5 +78,25 @@
     <footer>
       <p>© 2026 Suhan Bangera</p>
     </footer>
+		<script>
+			const WORKER_URL = "https://counter-api.suhan01-bangera.workers.dev";  
+
+			
+			const path = window.location.pathname.replace(/\//g, "_"); 
+			const namespace = "stories"; 
+			const key = path || "index";
+
+			
+			const api = `${WORKER_URL}/hit/${namespace}/${key}`;
+
+			fetch(api)
+				.then(r => r.json())
+				.then(data => {
+					document.getElementById("views-count").textContent = data.value;
+				})
+				.catch(() => {
+					document.getElementById("views-count").textContent = "0";
+				});
+		</script>
 </body>
 </html>

@@ -13,6 +13,11 @@
       <hr />
     </header>
 
+		<div id="views-container">
+			<span class="eye">👁️</span>
+			<span id="views-count">--</span>
+		</div>
+
     <article>
       <p>'YOU SHALL KNOW MY WRATH!!!' A demonic voice erupted from Claudia's vocals as she pinned down two tiny kids—a boy and a girl—onto a very expensive, yet absurdly soft couch.</p>
 <p>'Off you go, you little monster,' the boy, Ollie, screamed, trying his best to mimic the booming voice of a medieval knight, making sure that his consistent outburst of laughter didn't ruin the performance.</p>
@@ -131,5 +136,25 @@
     <footer>
       <p>© 2026 Suhan Bangera</p>
     </footer>
+		<script>
+			const WORKER_URL = "https://counter-api.suhan01-bangera.workers.dev";  
+
+			
+			const path = window.location.pathname.replace(/\//g, "_"); 
+			const namespace = "stories"; 
+			const key = path || "index";
+
+			
+			const api = `${WORKER_URL}/hit/${namespace}/${key}`;
+
+			fetch(api)
+				.then(r => r.json())
+				.then(data => {
+					document.getElementById("views-count").textContent = data.value;
+				})
+				.catch(() => {
+					document.getElementById("views-count").textContent = "0";
+				});
+		</script>
 </body>
 </html>

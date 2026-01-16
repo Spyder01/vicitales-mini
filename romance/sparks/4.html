@@ -127,7 +127,7 @@
 
 			
 			const path = window.location.pathname.replace(/\//g, "_"); 
-			const namespace = "stories"; 
+			const namespace = "COUNTERS"; 
 			const key = path || "index";
 
 			
@@ -139,7 +139,7 @@
 					document.getElementById("views-count").textContent = data.value;
 				})
 				.catch(() => {
-					document.getElementById("views-count").textContent = "0";
+					document.getElementById("views-count").textContent = "1";
 				});
 		</script>
 </body>
